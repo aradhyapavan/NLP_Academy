@@ -1,0 +1,397 @@
+{% extends "base.html" %}
+
+{% block title %}Part-of-Speech Tagging - NLP Ultimate Tutorial{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="mb-0">
+                        <i class="fas fa-tags"></i>
+                        Part-of-Speech Tagging
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Analyze the grammatical structure of text by identifying parts of speech for each word.</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>About:</strong> Part-of-Speech (POS) tagging is the process of marking up words in text according to their grammatical categories such as noun, verb, adjective, etc.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "_analysis_nav.html" %}
+
+    <!-- Text Input Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-keyboard"></i>
+                        Enter your text:
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <textarea id="textInput" class="form-control" rows="6" placeholder="Enter or paste your text here...">The quick brown fox jumps over the lazy dog.</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="sampleSelect" class="form-label">Or choose a sample:</label>
+                            <select id="sampleSelect" class="form-select">
+                                <option value="Custom">Custom</option>
+                                <option value="News Article">News Article</option>
+                                <option value="Product Review">Product Review</option>
+                                <option value="Scientific Text">Scientific Text</option>
+                                <option value="Literary Text">Literary Text</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <button id="processBtn" class="btn btn-primary btn-lg">
+                                <i class="fas fa-tags"></i>
+                                Analyze POS Tags
+                            </button>
+                        </div>
+                        <div>
+                            <button id="clearBtn" class="btn btn-outline-secondary">
+                                <i class="fas fa-trash"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POS Tagging Methods Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-info-circle"></i>
+                        POS Tagging Methods
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100 border-primary shadow-sm">
+                                <div class="card-header bg-primary text-white text-center">
+                                    <i class="fas fa-brain fa-3x mb-2"></i>
+                                    <h4 class="mb-0">NLTK (Penn Treebank)</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-center mb-3">Uses the Perceptron tagger trained on the Penn Treebank corpus with detailed grammatical categories.</p>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <i class="fas fa-tags text-primary me-2"></i>
+                                            <strong>36+ detailed tags</strong>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <i class="fas fa-flag-usa text-primary me-2"></i>
+                                            <strong>English-specific</strong>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <i class="fas fa-book text-primary me-2"></i>
+                                            <strong>Traditional NLP approach</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 border-success shadow-sm">
+                                <div class="card-header bg-success text-white text-center">
+                                    <i class="fas fa-globe fa-3x mb-2"></i>
+                                    <h4 class="mb-0">spaCy (Universal)</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-center mb-3">Uses the en_core_web_sm model with Universal POS tags for cross-linguistic consistency.</p>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <i class="fas fa-tags text-success me-2"></i>
+                                            <strong>17 universal tags</strong>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <i class="fas fa-globe text-success me-2"></i>
+                                            <strong>Cross-linguistic</strong>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <i class="fas fa-rocket text-success me-2"></i>
+                                            <strong>Modern NLP approach</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-bar"></i>
+                        POS Tagging Results
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContainer">
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                            <p>Click "Analyze POS Tags" to see grammatical analysis results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    const textInput = document.getElementById('textInput');
+    const sampleSel = document.getElementById('sampleSelect');
+    const routeKey = 'customTextBackup:' + window.location.pathname;
+    const shouldCarry = sessionStorage.getItem('carryTextOnNextPage') === '1';
+    
+    if (shouldCarry) {
+        // When carrying text via Quick Nav, use the carried text and set to Custom
+        const carriedText = sessionStorage.getItem('analysisText') || '';
+        if (sampleSel) sampleSel.value = 'Custom';
+        if (textInput) textInput.value = carriedText;
+        // Save as this route's custom backup
+        sessionStorage.setItem(routeKey, carriedText);
+        sessionStorage.removeItem('carryTextOnNextPage');
+    } else {
+        // Normal page load - restore any existing custom backup for this route
+        const routeBackup = sessionStorage.getItem(routeKey);
+        if (routeBackup !== null && sampleSel && sampleSel.value === 'Custom') {
+            if (textInput) textInput.value = routeBackup;
+        }
+    }
+    
+    // Save custom input changes to route-specific backup
+    if (textInput) {
+        textInput.addEventListener('input', function() {
+            if (sampleSel && sampleSel.value === 'Custom') {
+                sessionStorage.setItem(routeKey, textInput.value);
+            }
+        });
+    }
+    
+    // Sample text dropdown handler
+    document.getElementById('sampleSelect').addEventListener('change', function() {
+        const sampleType = this.value;
+        const textInput = document.getElementById('textInput');
+        const routeKey = 'customTextBackup:' + window.location.pathname;
+        
+        if (sampleType === 'Custom') {
+            // Restore custom backup for this route
+            const routeBackup = sessionStorage.getItem(routeKey);
+            textInput.value = routeBackup || '';
+        } else {
+            // Before switching to sample, save current custom input
+            if (this.previousValue === 'Custom' && textInput.value.trim()) {
+                sessionStorage.setItem(routeKey, textInput.value);
+            }
+            
+            // Get sample text from server
+            fetch('/api/sample-text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({sample_type: sampleType})
+            })
+            .then(response => response.json())
+            .then(data => {
+                textInput.value = data.text;
+            });
+        }
+        
+        // Remember previous value for next change
+        this.previousValue = sampleType;
+    });
+    
+    // Process button handler
+    document.getElementById('processBtn').addEventListener('click', function() {
+        const text = document.getElementById('textInput').value.trim();
+        
+        if (!text) {
+            alert('Please enter some text to analyze.');
+            return;
+        }
+        
+        // Show loading state
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        this.disabled = true;
+        
+        // Process text
+        processPOSTagging();
+        
+        // Reset button after a delay
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-tags"></i> Analyze POS Tags';
+            this.disabled = false;
+        }, 2000);
+    });
+    
+    // Clear button handler
+    document.getElementById('clearBtn').addEventListener('click', function() {
+        document.getElementById('textInput').value = '';
+        document.getElementById('resultsContainer').innerHTML = `
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                <p>Click "Analyze POS Tags" to see grammatical analysis results</p>
+            </div>
+        `;
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Enter to process
+        if (e.ctrlKey && e.key === 'Enter') {
+            document.getElementById('processBtn').click();
+        }
+        
+        // Ctrl+L to clear
+        if (e.ctrlKey && e.key === 'l') {
+            e.preventDefault();
+            document.getElementById('clearBtn').click();
+        }
+    });
+});
+
+// Process POS tagging
+function processPOSTagging() {
+    const text = document.getElementById('textInput').value.trim();
+    
+    if (!text) {
+        alert('Please enter some text to analyze.');
+        return;
+    }
+    
+    showLoading('resultsContainer');
+    
+    fetch('/api/pos-tagging', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({text: text})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displayResults(data.result);
+        } else {
+            showError(data.error || 'An error occurred while processing the text');
+        }
+    })
+    .catch(error => {
+        showError('Failed to process text: ' + error.message);
+    })
+    .finally(() => {
+        hideLoading('resultsContainer');
+    });
+}
+
+// Show loading state
+function showLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Analyzing grammatical structure...</p>
+            </div>
+        `;
+    }
+}
+
+// Hide loading state
+function hideLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element && element.innerHTML.includes('spinner-border')) {
+        element.innerHTML = '';
+    }
+}
+
+// Show error message
+function showError(message, elementId = 'resultsContainer') {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="alert alert-danger fade-in">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${message}
+            </div>
+        `;
+    }
+}
+
+// Display results
+function displayResults(result) {
+    const container = document.getElementById('resultsContainer');
+    if (container) {
+        container.innerHTML = result;
+        container.classList.add('fade-in');
+        
+        // Scroll to results
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// Function to switch between POS tag types
+function showPOSTags(type) {
+    // Hide all sections
+    const sections = document.querySelectorAll('.pos-tags-section');
+    sections.forEach(section => {
+        section.style.display = 'none';
+    });
+    
+    // Remove active class from all buttons
+    const buttons = document.querySelectorAll('.pos-legend-buttons .btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('btn-primary', 'active');
+        btn.classList.add('btn-outline-primary');
+    });
+    
+    // Show selected section
+    const targetSection = document.getElementById(type + '-tags');
+    if (targetSection) {
+        targetSection.style.display = 'block';
+    }
+    
+    // Activate selected button
+    const targetButton = document.getElementById(type + '-btn');
+    if (targetButton) {
+        targetButton.classList.remove('btn-outline-primary');
+        targetButton.classList.add('btn-primary', 'active');
+    }
+}
+</script>
+{% endblock %}

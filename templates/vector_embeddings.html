@@ -1,0 +1,499 @@
+{% extends "base.html" %}
+
+{% block title %}Vector Embeddings & Semantic Search - NLP Ultimate Tutorial{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="mb-0">
+                        <i class="fas fa-project-diagram"></i>
+                        Vector Embeddings & Semantic Search
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Convert text into numerical representations and perform semantic search to find meaningfully similar content.</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>About:</strong> Vector embeddings convert text into numerical representations where similar texts are placed closer together in a high-dimensional space.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "_analysis_nav.html" %}
+
+    <!-- Input Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-keyboard"></i>
+                        Enter text to analyze:
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <textarea id="textInput" class="form-control" rows="6" placeholder="Enter text to analyze with vector embeddings...">The International Space Station (ISS) is a modular space station in low Earth orbit. It is a multinational collaborative project involving five space agencies: NASA (United States), Roscosmos (Russia), JAXA (Japan), ESA (Europe), and CSA (Canada). The ownership and use of the space station is established by intergovernmental treaties and agreements. The ISS serves as a microgravity and space environment research laboratory in which scientific research is conducted in astrobiology, astronomy, meteorology, physics, and other fields.</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="sampleSelect" class="form-label">Or choose a sample:</label>
+                            <select id="sampleSelect" class="form-select">
+                                <option value="Custom">Custom</option>
+                                <option value="Space Station">Space Station</option>
+                                <option value="Python">Python</option>
+                                <option value="Climate">Climate</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <button id="processBtn" class="btn btn-primary btn-lg">
+                                <i class="fas fa-project-diagram"></i>
+                                Generate Embeddings
+                            </button>
+                        </div>
+                        <div>
+                            <button id="clearBtn" class="btn btn-outline-secondary">
+                                <i class="fas fa-trash"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-bar"></i>
+                        Embedding Analysis Results
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContainer">
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                            <p>Click "Generate Embeddings" to see vector analysis results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    // Only carry over when using Quick Nav; otherwise leave defaults
+    const shouldCarry = sessionStorage.getItem('carryTextOnNextPage') === '1';
+    if (shouldCarry) {
+        const storedText = sessionStorage.getItem('analysisText');
+        if (storedText) document.getElementById('textInput').value = storedText;
+        sessionStorage.removeItem('carryTextOnNextPage');
+    }
+    
+    // Sample text dropdown handler
+    document.getElementById('sampleSelect').addEventListener('change', function() {
+        const sampleType = this.value;
+        const textInput = document.getElementById('textInput');
+        
+        if (sampleType === 'Custom') {
+            textInput.value = '';
+        } else {
+            // Set sample prompts based on type
+            const samples = {
+                'Space Station': 'The International Space Station (ISS) is a modular space station in low Earth orbit. It is a multinational collaborative project involving five space agencies: NASA (United States), Roscosmos (Russia), JAXA (Japan), ESA (Europe), and CSA (Canada). The ownership and use of the space station is established by intergovernmental treaties and agreements. The ISS serves as a microgravity and space environment research laboratory in which scientific research is conducted in astrobiology, astronomy, meteorology, physics, and other fields.',
+                'Python': 'Python is a high-level, general-purpose programming language. Its design philosophy emphasizes code readability with the use of significant indentation. Python is dynamically typed and garbage-collected. It supports multiple programming paradigms, including structured, object-oriented and functional programming. It is often described as a \'batteries included\' language due to its comprehensive standard library.',
+                'Climate': 'Climate change refers to long-term shifts in global temperatures and weather patterns. While climate variations are natural, human activities have been the main driver of climate change since the 1800s, primarily due to burning fossil fuels, which generates heat-trapping gases. The effects of climate change include rising sea levels, more frequent extreme weather events, and changes in precipitation patterns.'
+            };
+            
+            if (samples[sampleType]) {
+                textInput.value = samples[sampleType];
+            }
+        }
+    });
+    
+    // Process button handler
+    document.getElementById('processBtn').addEventListener('click', function() {
+        const text = document.getElementById('textInput').value.trim();
+        
+        if (!text) {
+            alert('Please enter text to analyze.');
+            return;
+        }
+        
+        // Show loading state
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        this.disabled = true;
+        
+        // Process embeddings
+        processEmbeddings();
+        
+        // Reset button after a delay
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-project-diagram"></i> Generate Embeddings';
+            this.disabled = false;
+        }, 2000);
+    });
+    
+    // Search button handler
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        const text = document.getElementById('textInput').value.trim();
+        const query = document.getElementById('searchInput').value.trim();
+        
+        if (!text) {
+            alert('Please enter text to analyze first.');
+            return;
+        }
+        
+        if (!query) {
+            alert('Please enter a search query.');
+            return;
+        }
+        
+        // Show loading state
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+        this.disabled = true;
+        
+        // Process search
+        processSearch();
+        
+        // Reset button after a delay
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-search"></i> Search';
+            this.disabled = false;
+        }, 2000);
+    });
+    
+    // Clear button handler
+    document.getElementById('clearBtn').addEventListener('click', function() {
+        document.getElementById('textInput').value = '';
+        document.getElementById('searchInput').value = '';
+        document.getElementById('resultsContainer').innerHTML = `
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                <p>Click "Generate Embeddings" to see vector analysis results</p>
+            </div>
+        `;
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Enter to process
+        if (e.ctrlKey && e.key === 'Enter') {
+            document.getElementById('processBtn').click();
+        }
+        
+        // Ctrl+L to clear
+        if (e.ctrlKey && e.key === 'l') {
+            e.preventDefault();
+            document.getElementById('clearBtn').click();
+        }
+    });
+});
+
+// Set example text
+function setExample(text) {
+    document.getElementById('textInput').value = text;
+}
+
+// Process embeddings
+function processEmbeddings() {
+    const text = document.getElementById('textInput').value.trim();
+    
+    if (!text) {
+        alert('Please enter text to analyze.');
+        return;
+    }
+    
+    showLoading('resultsContainer');
+    
+    fetch('/api/vector-embeddings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            text: text
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('API Response:', data); // Debug log
+        if (data.success) {
+            console.log('Result length:', data.result ? data.result.length : 'null'); // Debug log
+            displayResults(data.result);
+        } else {
+            console.error('API Error:', data.error); // Debug log
+            showError(data.error || 'An error occurred while generating embeddings');
+        }
+    })
+    .catch(error => {
+        showError('Failed to generate embeddings: ' + error.message);
+    })
+    .finally(() => {
+        hideLoading('resultsContainer');
+    });
+}
+
+// Process search
+function processSearch() {
+    const text = document.getElementById('textInput').value.trim();
+    const query = document.getElementById('searchInput').value.trim();
+    
+    if (!text) {
+        alert('Please enter text to analyze first.');
+        return;
+    }
+    
+    if (!query) {
+        alert('Please enter a search query.');
+        return;
+    }
+    
+    showLoading('resultsContainer');
+    
+    fetch('/api/vector-embeddings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            text: text,
+            query: query
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displaySearchResults(data.results);
+        } else {
+            showError(data.error || 'An error occurred while searching');
+        }
+    })
+    .catch(error => {
+        showError('Failed to perform search: ' + error.message);
+    })
+    .finally(() => {
+        hideLoading('resultsContainer');
+    });
+}
+
+// Show loading state
+function showLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Processing...</p>
+            </div>
+        `;
+    }
+}
+
+// Hide loading state
+function hideLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element && element.innerHTML.includes('spinner-border')) {
+        element.innerHTML = '';
+    }
+}
+
+// Show error message
+function showError(message, elementId = 'resultsContainer') {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="alert alert-danger fade-in">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${message}
+            </div>
+        `;
+    }
+}
+
+// Display results
+function displayResults(result) {
+    console.log('displayResults called with:', result ? result.substring(0, 200) + '...' : 'null'); // Debug log
+    const container = document.getElementById('resultsContainer');
+    console.log('Results container found:', !!container); // Debug log
+    if (container) {
+        container.innerHTML = result;
+        container.classList.add('fade-in');
+        console.log('Results inserted, container innerHTML length:', container.innerHTML.length); // Debug log
+        
+        // Scroll to results
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// Display search results
+function displaySearchResults(results) {
+    const container = document.getElementById('resultsContainer');
+    if (container) {
+        let html = '<h4>Search Results:</h4>';
+        
+        if (results && results.length > 0) {
+            results.forEach((result, index) => {
+                const scorePercent = Math.round(result.score * 100);
+                html += `
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p class="mb-1">${result.text}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-end">
+                                        <span class="badge bg-primary">${scorePercent}%</span>
+                                    </div>
+                                    <div class="progress mt-1" style="height: 8px;">
+                                        <div class="progress-bar" role="progressbar" style="width: ${scorePercent}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            html += '<div class="alert alert-info">No relevant results found. Try different search terms.</div>';
+        }
+        
+        container.innerHTML = html;
+        container.classList.add('fade-in');
+        
+        // Scroll to results
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// Semantic search function (called from the generated search interface)
+function performSemanticSearch() {
+    const searchInput = document.getElementById('search-input');
+    const textInput = document.getElementById('textInput');
+    
+    if (!searchInput || !textInput) {
+        alert('Please generate embeddings first, then try searching.');
+        return;
+    }
+    
+    const query = searchInput.value.trim();
+    const context = textInput.value.trim();
+    
+    if (!query) {
+        alert('Please enter a search query.');
+        return;
+    }
+    
+    if (!context) {
+        alert('Please enter text to analyze first.');
+        return;
+    }
+    
+    // Show loading
+    const resultsDiv = document.getElementById('search-results');
+    const resultsContainer = document.getElementById('results-container');
+    
+    if (resultsDiv) {
+        resultsDiv.style.display = 'block';
+        resultsContainer.innerHTML = `
+            <div class="text-center py-3">
+                <div class="spinner-border text-warning" role="status">
+                    <span class="visually-hidden">Searching...</span>
+                </div>
+                <p class="mt-2">Searching for semantically similar content...</p>
+            </div>
+        `;
+    }
+    
+    // Perform search
+    fetch('/api/semantic-search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            context: context,
+            query: query
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displaySearchResults(data.results);
+        } else {
+            showSearchError(data.error || 'Search failed');
+        }
+    })
+    .catch(error => {
+        showSearchError('Failed to perform search: ' + error.message);
+    });
+}
+
+function displaySearchResults(results) {
+    const resultsContainer = document.getElementById('results-container');
+    
+    if (!results || results.length === 0) {
+        resultsContainer.innerHTML = `
+            <div class="text-center py-4">
+                <i class="fas fa-search fa-2x text-muted mb-3"></i>
+                <p class="text-muted">No similar content found.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    results.forEach((result, index) => {
+        const percentage = (result.score * 100).toFixed(1);
+        const badgeClass = result.score > 0.8 ? 'bg-success' : result.score > 0.6 ? 'bg-warning' : 'bg-secondary';
+        
+        html += `
+            <div class="mb-3 p-3 border rounded bg-white">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h6 class="mb-0 text-primary">Result ${index + 1}</h6>
+                    <span class="badge ${badgeClass}">${percentage}% match</span>
+                </div>
+                <p class="mb-0">${result.text}</p>
+            </div>
+        `;
+    });
+    
+    resultsContainer.innerHTML = html;
+}
+
+function showSearchError(message) {
+    const resultsContainer = document.getElementById('results-container');
+    resultsContainer.innerHTML = `
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Search Error:</strong> ${message}
+        </div>
+    `;
+}
+</script>
+{% endblock %}

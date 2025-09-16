@@ -1,0 +1,469 @@
+{% extends "base.html" %}
+
+{% block title %}Text Generation - NLP Ultimate Tutorial{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="mb-0">
+                        <i class="fas fa-magic"></i>
+                        Text Generation
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Generate human-like text continuations using advanced language models.</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>About:</strong> Text generation models can continue or expand on a given text prompt, creating new content that follows the style and context of the input.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "_analysis_nav.html" %}
+
+    <!-- Input Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-keyboard"></i>
+                        Enter your prompt:
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <textarea id="textInput" class="form-control" rows="6" placeholder="Enter a prompt to continue or expand on...">Once upon a time in a magical forest,</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="sampleSelect" class="form-label">Or choose a sample:</label>
+                            <select id="sampleSelect" class="form-select">
+                                <option value="Custom">Custom</option>
+                                <option value="Story">Story</option>
+                                <option value="Technical">Technical</option>
+                                <option value="Email">Email</option>
+                                <option value="Recipe">Recipe</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <button id="processBtn" class="btn btn-primary btn-lg">
+                                <i class="fas fa-magic"></i>
+                                Generate Text
+                            </button>
+                        </div>
+                        <div>
+                            <button id="clearBtn" class="btn btn-outline-secondary">
+                                <i class="fas fa-trash"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generation Settings Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-cog"></i>
+                        Generation Settings
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="maxLength" class="form-label">Output Length</label>
+                            <input type="range" class="form-range" id="maxLength" min="30" max="250" value="100" step="10">
+                            <div class="d-flex justify-content-between">
+                                <small>30</small>
+                                <small id="maxLengthValue">100</small>
+                                <small>250</small>
+                            </div>
+                            <small class="text-muted">Maximum number of tokens to generate</small>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="temperature" class="form-label">Temperature</label>
+                            <input type="range" class="form-range" id="temperature" min="0.1" max="1.5" value="0.7" step="0.1">
+                            <div class="d-flex justify-content-between">
+                                <small>0.1</small>
+                                <small id="temperatureValue">0.7</small>
+                                <small>1.5</small>
+                            </div>
+                            <small class="text-muted">Higher values make output more random</small>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="topP" class="form-label">Top-p Sampling</label>
+                            <input type="range" class="form-range" id="topP" min="0.1" max="1.0" value="0.9" step="0.1">
+                            <div class="d-flex justify-content-between">
+                                <small>0.1</small>
+                                <small id="topPValue">0.9</small>
+                                <small>1.0</small>
+                            </div>
+                            <small class="text-muted">Controls diversity via nucleus sampling</small>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="numSequences" class="form-label">Number of Generations</label>
+                            <input type="range" class="form-range" id="numSequences" min="1" max="3" value="1" step="1">
+                            <div class="d-flex justify-content-between">
+                                <small>1</small>
+                                <small id="numSequencesValue">1</small>
+                                <small>3</small>
+                            </div>
+                            <small class="text-muted">Generate multiple versions to choose from</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Info Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-info-circle"></i>
+                        Model Information
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-brain fa-2x text-primary mb-2"></i>
+                                    <h5>GPT-2 Model</h5>
+                                    <p class="small">124M parameter language model trained on diverse internet text</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Coherent text continuations</li>
+                                        <li>• Style-aware generation</li>
+                                        <li>• Context understanding</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-sliders-h fa-2x text-success mb-2"></i>
+                                    <h5>Generation Controls</h5>
+                                    <p class="small">Fine-tune output characteristics with advanced parameters</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Temperature control</li>
+                                        <li>• Top-p sampling</li>
+                                        <li>• Length management</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
+                                    <h5>Text Analysis</h5>
+                                    <p class="small">Comprehensive analysis of generated text quality and characteristics</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Word length distribution</li>
+                                        <li>• Lexical diversity</li>
+                                        <li>• Generation statistics</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Example Prompts Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-list"></i>
+                        Example Prompts
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('Once upon a time in a magical forest,')">
+                                Once upon a time in a magical forest,
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('The research findings indicate that')">
+                                The research findings indicate that
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('Dear customer service team, I am writing regarding')">
+                                Dear customer service team, I am writing regarding
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('The recipe for the perfect chocolate cake requires')">
+                                The recipe for the perfect chocolate cake requires
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-bar"></i>
+                        Generated Text Results
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContainer">
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                            <p>Click "Generate Text" to see text generation results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    // Only carry over when navigating via Quick Nav; otherwise reset
+    const shouldCarry = sessionStorage.getItem('carryTextOnNextPage') === '1';
+    const textInput = document.getElementById('textInput');
+    const sampleSelect = document.getElementById('sampleSelect');
+    const routeKey = 'customTextBackup:' + (window.location.pathname || '/text-generation');
+
+    if (shouldCarry) {
+        const storedText = sessionStorage.getItem('analysisText');
+        if (storedText) textInput.value = storedText;
+        sessionStorage.removeItem('carryTextOnNextPage');
+    } else {
+        // Fresh route: reset to defaults
+        textInput.value = textInput.defaultValue || '';
+        if (sampleSelect) sampleSelect.value = 'Custom';
+    }
+    
+    // Update slider values
+    document.getElementById('maxLength').addEventListener('input', function() {
+        document.getElementById('maxLengthValue').textContent = this.value;
+    });
+    
+    document.getElementById('temperature').addEventListener('input', function() {
+        document.getElementById('temperatureValue').textContent = this.value;
+    });
+    
+    document.getElementById('topP').addEventListener('input', function() {
+        document.getElementById('topPValue').textContent = this.value;
+    });
+    
+    document.getElementById('numSequences').addEventListener('input', function() {
+        document.getElementById('numSequencesValue').textContent = this.value;
+    });
+    
+    // Sample text dropdown handler with Custom restore
+    sampleSelect.addEventListener('change', function() {
+        const sampleType = this.value;
+        if (sampleType === 'Custom') {
+            const backup = sessionStorage.getItem(routeKey);
+            if (backup !== null) textInput.value = backup;
+            return;
+        }
+
+        // Save current custom prompt before switching away
+        sessionStorage.setItem(routeKey, textInput.value);
+
+        // Set sample prompts based on type
+        const samples = {
+            'Story': 'Once upon a time in a magical forest,',
+            'Technical': 'The research findings indicate that',
+            'Email': 'Dear customer service team, I am writing regarding',
+            'Recipe': 'The recipe for the perfect chocolate cake requires'
+        };
+        textInput.value = samples[sampleType] || '';
+        sessionStorage.setItem('analysisText', textInput.value);
+    });
+
+    // While typing, keep backups
+    textInput.addEventListener('input', function(){
+        sessionStorage.setItem('analysisText', textInput.value);
+        sessionStorage.setItem(routeKey, textInput.value);
+    });
+    
+    // Process button handler
+    document.getElementById('processBtn').addEventListener('click', function() {
+        const text = document.getElementById('textInput').value.trim();
+        
+        if (!text) {
+            alert('Please enter a prompt text.');
+            return;
+        }
+        
+        // Show loading state
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        this.disabled = true;
+        
+        // Process text
+        processTextGeneration();
+        
+        // Reset button after a delay
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-magic"></i> Generate Text';
+            this.disabled = false;
+        }, 2000);
+    });
+    
+    // Clear button handler
+    document.getElementById('clearBtn').addEventListener('click', function() {
+        document.getElementById('textInput').value = '';
+        document.getElementById('resultsContainer').innerHTML = `
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                <p>Click "Generate Text" to see text generation results</p>
+            </div>
+        `;
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Enter to process
+        if (e.ctrlKey && e.key === 'Enter') {
+            document.getElementById('processBtn').click();
+        }
+        
+        // Ctrl+L to clear
+        if (e.ctrlKey && e.key === 'l') {
+            e.preventDefault();
+            document.getElementById('clearBtn').click();
+        }
+    });
+});
+
+// Set example prompt
+function setExample(prompt) {
+    document.getElementById('textInput').value = prompt;
+}
+
+// Process text generation
+function processTextGeneration() {
+    const text = document.getElementById('textInput').value.trim();
+    const maxLength = parseInt(document.getElementById('maxLength').value);
+    const temperature = parseFloat(document.getElementById('temperature').value);
+    const topP = parseFloat(document.getElementById('topP').value);
+    const numSequences = parseInt(document.getElementById('numSequences').value);
+    
+    if (!text) {
+        alert('Please enter a prompt text.');
+        return;
+    }
+    
+    showLoading('resultsContainer');
+    
+    fetch('/api/text-generation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            text: text,
+            max_length: maxLength,
+            temperature: temperature,
+            top_p: topP,
+            num_sequences: numSequences
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displayResults(data.result);
+        } else {
+            showError(data.error || 'An error occurred while generating text');
+        }
+    })
+    .catch(error => {
+        showError('Failed to generate text: ' + error.message);
+    })
+    .finally(() => {
+        hideLoading('resultsContainer');
+    });
+}
+
+// Show loading state
+function showLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Generating text...</p>
+            </div>
+        `;
+    }
+}
+
+// Hide loading state
+function hideLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element && element.innerHTML.includes('spinner-border')) {
+        element.innerHTML = '';
+    }
+}
+
+// Show error message
+function showError(message, elementId = 'resultsContainer') {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="alert alert-danger fade-in">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${message}
+            </div>
+        `;
+    }
+}
+
+// Display results
+function displayResults(result) {
+    const container = document.getElementById('resultsContainer');
+    if (container) {
+        container.innerHTML = result;
+        container.classList.add('fade-in');
+        
+        // Scroll to results
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+</script>
+{% endblock %}

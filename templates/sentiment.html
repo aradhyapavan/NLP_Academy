@@ -1,0 +1,430 @@
+{% extends "base.html" %}
+
+{% block title %}Sentiment Analysis - NLP Ultimate Tutorial{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="mb-0">
+                        <i class="fas fa-heart"></i>
+                        Sentiment Analysis
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Analyze the emotional tone and sentiment of text using multiple advanced models.</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>About:</strong> Sentiment analysis determines the emotional tone behind text to identify if it expresses positive, negative, or neutral sentiment.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "_analysis_nav.html" %}
+
+    <!-- Text Input Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-keyboard"></i>
+                        Enter your text:
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <textarea id="textInput" class="form-control" rows="6" placeholder="Enter or paste your text here...">I absolutely loved this movie! The acting was superb and the plot kept me on the edge of my seat.</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="sampleSelect" class="form-label">Or choose a sample:</label>
+                            <select id="sampleSelect" class="form-select">
+                                <option value="Custom">Custom</option>
+                                <option value="News Article">News Article</option>
+                                <option value="Product Review">Product Review</option>
+                                <option value="Scientific Text">Scientific Text</option>
+                                <option value="Literary Text">Literary Text</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <button id="processBtn" class="btn btn-primary btn-lg">
+                                <i class="fas fa-heart"></i>
+                                Analyze Sentiment
+                            </button>
+                        </div>
+                        <div>
+                            <button id="clearBtn" class="btn btn-outline-secondary">
+                                <i class="fas fa-trash"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sentiment Analysis Methods Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-info-circle"></i>
+                        Sentiment Analysis Methods
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <!-- VADER Card -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sentiment-method-card h-100 vader-card">
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                    <h4 class="method-title">VADER</h4>
+                                    <p class="method-subtitle">Rule-based Analyzer</p>
+                                </div>
+                                <div class="method-body">
+                                    <p class="method-description">Rule-based sentiment analyzer specifically tuned for social media text with compound scoring.</p>
+                                    <div class="method-features">
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Lexicon-based approach</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Social media optimized</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Fast and reliable</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- DistilBERT Card -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sentiment-method-card h-100 distilbert-card">
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-brain"></i>
+                                    </div>
+                                    <h4 class="method-title">DistilBERT</h4>
+                                    <p class="method-subtitle">Transformer Model</p>
+                                </div>
+                                <div class="method-body">
+                                    <p class="method-description">Transformer model fine-tuned on Stanford Sentiment Treebank dataset with high accuracy.</p>
+                                    <div class="method-features">
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Deep learning approach</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>~91% accuracy</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Context-aware</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- RoBERTa Emotion Card -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sentiment-method-card h-100 roberta-card">
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-smile"></i>
+                                    </div>
+                                    <h4 class="method-title">RoBERTa Emotion</h4>
+                                    <p class="method-subtitle">Multi-label Emotion</p>
+                                </div>
+                                <div class="method-body">
+                                    <p class="method-description">Multi-label emotion detection model identifying specific emotions like joy, anger, sadness, etc.</p>
+                                    <div class="method-features">
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Emotion classification</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Multi-label detection</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Detailed emotional analysis</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sentiment Scale Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-line"></i>
+                        Sentiment Scale
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-frown fa-2x text-danger mb-2"></i>
+                                    <h5>Negative</h5>
+                                    <p class="small mb-0">Score: -1.0 to -0.05</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-meh fa-2x text-warning mb-2"></i>
+                                    <h5>Neutral</h5>
+                                    <p class="small mb-0">Score: -0.05 to 0.05</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-smile fa-2x text-success mb-2"></i>
+                                    <h5>Positive</h5>
+                                    <p class="small mb-0">Score: 0.05 to 1.0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-heart fa-2x text-info mb-2"></i>
+                                    <h5>Emotions</h5>
+                                    <p class="small mb-0">Joy, Anger, Sadness, Fear, etc.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-bar"></i>
+                        Sentiment Analysis Results
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContainer">
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                            <p>Click "Analyze Sentiment" to see sentiment analysis results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    // Only carry over when using Quick Nav; otherwise leave defaults
+    const shouldCarry = sessionStorage.getItem('carryTextOnNextPage') === '1';
+    if (shouldCarry) {
+        const sampleSel = document.getElementById('sampleSelect');
+        if (sampleSel) sampleSel.value = 'Custom';
+        const storedText = sessionStorage.getItem('analysisText');
+        if (storedText) document.getElementById('textInput').value = storedText;
+        sessionStorage.removeItem('carryTextOnNextPage');
+    }
+    
+    // Sample text dropdown handler
+    document.getElementById('sampleSelect').addEventListener('change', function() {
+        const sampleType = this.value;
+        const textInput = document.getElementById('textInput');
+        
+        if (sampleType === 'Custom') {
+            textInput.value = '';
+        } else {
+            // Get sample text from server
+            fetch('/api/sample-text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({sample_type: sampleType})
+            })
+            .then(response => response.json())
+            .then(data => {
+                textInput.value = data.text;
+            });
+        }
+    });
+    
+    // Process button handler
+    document.getElementById('processBtn').addEventListener('click', function() {
+        const text = document.getElementById('textInput').value.trim();
+        
+        if (!text) {
+            alert('Please enter some text to analyze.');
+            return;
+        }
+        
+        // Show loading state
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        this.disabled = true;
+        
+        // Process text
+        processSentiment();
+        
+        // Reset button after a delay
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-heart"></i> Analyze Sentiment';
+            this.disabled = false;
+        }, 2000);
+    });
+    
+    // Clear button handler
+    document.getElementById('clearBtn').addEventListener('click', function() {
+        document.getElementById('textInput').value = '';
+        document.getElementById('resultsContainer').innerHTML = `
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                <p>Click "Analyze Sentiment" to see sentiment analysis results</p>
+            </div>
+        `;
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Enter to process
+        if (e.ctrlKey && e.key === 'Enter') {
+            document.getElementById('processBtn').click();
+        }
+        
+        // Ctrl+L to clear
+        if (e.ctrlKey && e.key === 'l') {
+            e.preventDefault();
+            document.getElementById('clearBtn').click();
+        }
+    });
+});
+
+// Process sentiment analysis
+function processSentiment() {
+    const text = document.getElementById('textInput').value.trim();
+    
+    if (!text) {
+        alert('Please enter some text to analyze.');
+        return;
+    }
+    
+    showLoading('resultsContainer');
+    
+    fetch('/api/sentiment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({text: text})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displayResults(data.result);
+        } else {
+            showError(data.error || 'An error occurred while processing the text');
+        }
+    })
+    .catch(error => {
+        showError('Failed to process text: ' + error.message);
+    })
+    .finally(() => {
+        hideLoading('resultsContainer');
+    });
+}
+
+// Show loading state
+function showLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Analyzing sentiment and emotions...</p>
+            </div>
+        `;
+    }
+}
+
+// Hide loading state
+function hideLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element && element.innerHTML.includes('spinner-border')) {
+        element.innerHTML = '';
+    }
+}
+
+// Show error message
+function showError(message, elementId = 'resultsContainer') {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="alert alert-danger fade-in">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${message}
+            </div>
+        `;
+    }
+}
+
+// Display results
+function displayResults(result) {
+    const container = document.getElementById('resultsContainer');
+    if (container) {
+        container.innerHTML = result;
+        container.classList.add('fade-in');
+        
+        // Scroll to results
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+</script>
+{% endblock %}

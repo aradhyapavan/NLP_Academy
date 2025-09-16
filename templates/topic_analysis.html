@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+
+{% block title %}Topic Analysis - NLP Ultimate Tutorial{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="mb-0">
+                        <i class="fas fa-project-diagram"></i>
+                        Topic Analysis
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Identify main themes and subjects in text using advanced topic modeling techniques.</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>About:</strong> Topic analysis identifies the main themes and subjects in a text, helping to categorize content and understand what it's about.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "_analysis_nav.html" %}
+
+    <!-- Text Input Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-keyboard"></i>
+                        Enter your text:
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <textarea id="textInput" class="form-control" rows="10" placeholder="Enter or paste your text here... (minimum 50 words for best results)">Artificial intelligence (AI) is intelligence demonstrated by machines, as opposed to the natural intelligence displayed by animals including humans. AI research has been defined as the field of study of intelligent agents, which refers to any system that perceives its environment and takes actions that maximize its chance of achieving its goals. The term "artificial intelligence" had previously been used to describe machines that mimic and display "human" cognitive skills that are associated with the human mind, such as "learning" and "problem-solving". This definition has since been rejected by major AI researchers who now describe AI in terms of rationality and acting rationally, which does not limit how intelligence can be articulated. AI applications include advanced web search engines, recommendation systems (used by YouTube, Amazon and Netflix), understanding human speech (such as Siri or Alexa), self-driving cars, and competing at the highest level in strategic game systems (such as chess and Go). As machines become increasingly capable, tasks considered to require "intelligence" are often removed from the definition of AI, a phenomenon known as the AI effect. For instance, optical character recognition is frequently excluded from things considered to be AI.</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="sampleSelect" class="form-label">Or choose a sample:</label>
+                            <select id="sampleSelect" class="form-select">
+                                <option value="Custom">Custom</option>
+                                <option value="News Article">News Article</option>
+                                <option value="Product Review">Product Review</option>
+                                <option value="Scientific Text">Scientific Text</option>
+                                <option value="Literary Text">Literary Text</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <button id="processBtn" class="btn btn-primary btn-lg">
+                                <i class="fas fa-project-diagram"></i>
+                                Analyze Topics
+                            </button>
+                        </div>
+                        <div>
+                            <button id="clearBtn" class="btn btn-outline-secondary">
+                                <i class="fas fa-trash"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Topic Analysis Methods Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-info-circle"></i>
+                        Topic Analysis Methods
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-tags fa-2x text-primary mb-2"></i>
+                                    <h5>Topic Classification</h5>
+                                    <p class="small">Identifies predefined topic categories using keyword matching and scoring.</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Environment, Science, Business</li>
+                                        <li>• Health, Technology, Politics</li>
+                                        <li>• Sports, Entertainment, Travel</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-bar fa-2x text-success mb-2"></i>
+                                    <h5>Term Frequency</h5>
+                                    <p class="small">Analyzes word frequencies to identify the most important terms and concepts.</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Word frequency analysis</li>
+                                        <li>• Key phrase extraction</li>
+                                        <li>• N-gram analysis</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-calculator fa-2x text-info mb-2"></i>
+                                    <h5>TF-IDF Analysis</h5>
+                                    <p class="small">Identifies distinctive terms using Term Frequency-Inverse Document Frequency.</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Sentence-level analysis</li>
+                                        <li>• Distinctive term identification</li>
+                                        <li>• Heatmap visualization</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-brain fa-2x text-warning mb-2"></i>
+                                    <h5>LDA Topic Modeling</h5>
+                                    <p class="small">Uses Latent Dirichlet Allocation to discover abstract topics in text.</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Probabilistic modeling</li>
+                                        <li>• Topic distribution</li>
+                                        <li>• Network visualization</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Features Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-line"></i>
+                        Analysis Features
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-cloud fa-2x text-primary mb-2"></i>
+                                    <h5>Word Clouds</h5>
+                                    <p class="small mb-0">Visual representation of term frequencies</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-network-wired fa-2x text-success mb-2"></i>
+                                    <h5>Network Graphs</h5>
+                                    <p class="small mb-0">Topic-term relationship visualization</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-fire fa-2x text-danger mb-2"></i>
+                                    <h5>Heatmaps</h5>
+                                    <p class="small mb-0">TF-IDF term importance visualization</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-bar"></i>
+                        Topic Analysis Results
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContainer">
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                            <p>Click "Analyze Topics" to see topic analysis results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    // Only carry over when requested
+    const shouldCarry = sessionStorage.getItem('carryTextOnNextPage') === '1';
+    if (shouldCarry) {
+        const storedText = sessionStorage.getItem('analysisText');
+        if (storedText) document.getElementById('textInput').value = storedText;
+        sessionStorage.removeItem('carryTextOnNextPage');
+    }
+    
+    // Sample text dropdown handler with Custom restore
+    document.getElementById('sampleSelect').addEventListener('change', function() {
+        const sampleType = this.value;
+        const textInput = document.getElementById('textInput');
+        const routeKey = 'customTextBackup:' + (window.location.pathname || '/topic-analysis');
+        
+        if (sampleType === 'Custom') {
+            const backup = sessionStorage.getItem(routeKey);
+            if (backup !== null) textInput.value = backup;
+            return;
+        }
+        
+        sessionStorage.setItem(routeKey, textInput.value);
+        
+        fetch('/api/sample-text', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({sample_type: sampleType})
+        })
+        .then(response => response.json())
+        .then(data => {
+            textInput.value = data.text || '';
+        });
+    });
+    
+    // Keep backup while typing
+    (function(){
+        const textInput = document.getElementById('textInput');
+        const routeKey = 'customTextBackup:' + (window.location.pathname || '/topic-analysis');
+        textInput.addEventListener('input', function(){
+            sessionStorage.setItem(routeKey, textInput.value);
+        });
+    })();
+    
+    // Process button handler
+    document.getElementById('processBtn').addEventListener('click', function() {
+        const text = document.getElementById('textInput').value.trim();
+        
+        if (!text) {
+            alert('Please enter some text to analyze.');
+            return;
+        }
+        
+        // Show loading state
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        this.disabled = true;
+        
+        // Process text
+        processTopicAnalysis();
+        
+        // Reset button after a delay
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-project-diagram"></i> Analyze Topics';
+            this.disabled = false;
+        }, 2000);
+    });
+    
+    // Clear button handler
+    document.getElementById('clearBtn').addEventListener('click', function() {
+        document.getElementById('textInput').value = '';
+        document.getElementById('resultsContainer').innerHTML = `
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                <p>Click "Analyze Topics" to see topic analysis results</p>
+            </div>
+        `;
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Enter to process
+        if (e.ctrlKey && e.key === 'Enter') {
+            document.getElementById('processBtn').click();
+        }
+        
+        // Ctrl+L to clear
+        if (e.ctrlKey && e.key === 'l') {
+            e.preventDefault();
+            document.getElementById('clearBtn').click();
+        }
+    });
+});
+
+// Process topic analysis
+function processTopicAnalysis() {
+    const text = document.getElementById('textInput').value.trim();
+    
+    if (!text) {
+        alert('Please enter some text to analyze.');
+        return;
+    }
+    
+    showLoading('resultsContainer');
+    
+    fetch('/api/topic-analysis', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({text: text})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displayResults(data.result);
+        } else {
+            showError(data.error || 'An error occurred while processing the text');
+        }
+    })
+    .catch(error => {
+        showError('Failed to process text: ' + error.message);
+    })
+    .finally(() => {
+        hideLoading('resultsContainer');
+    });
+}
+
+// Show loading state
+function showLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Analyzing topics and themes...</p>
+            </div>
+        `;
+    }
+}
+
+// Hide loading state
+function hideLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element && element.innerHTML.includes('spinner-border')) {
+        element.innerHTML = '';
+    }
+}
+
+// Show error message
+function showError(message, elementId = 'resultsContainer') {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="alert alert-danger fade-in">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${message}
+            </div>
+        `;
+    }
+}
+
+// Display results
+function displayResults(result) {
+    const container = document.getElementById('resultsContainer');
+    if (container) {
+        container.innerHTML = result;
+        container.classList.add('fade-in');
+        
+        // Scroll to results
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+</script>
+{% endblock %}

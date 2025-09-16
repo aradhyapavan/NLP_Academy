@@ -1,0 +1,71 @@
+<div class="card mb-4 quick-nav">
+  <div class="card-header">
+    <h5 class="mb-0"><i class="fas fa-compass me-2"></i>Quick Navigation</h5>
+  </div>
+  <div class="card-body">
+    <!-- Text Processing -->
+    <h6 class="mb-2"><i class="fas fa-edit me-2"></i>Text Processing</h6>
+    <div class="row mb-3">
+      <div class="col-md-3 mb-2">
+        <a href="{{ url_for('preprocessing') }}" class="btn btn-outline-primary w-100"><i class="fas fa-tools"></i> Preprocessing</a>
+      </div>
+      <div class="col-md-3 mb-2">
+        <a href="{{ url_for('tokenization') }}" class="btn btn-outline-primary w-100"><i class="fas fa-cut"></i> Tokenization</a>
+      </div>
+      <div class="col-md-3 mb-2">
+        <a href="{{ url_for('pos_tagging') }}" class="btn btn-outline-primary w-100"><i class="fas fa-tags"></i> POS</a>
+      </div>
+      <div class="col-md-3 mb-2">
+        <a href="{{ url_for('named_entity') }}" class="btn btn-outline-primary w-100"><i class="fas fa-user-tag"></i> NER</a>
+      </div>
+    </div>
+
+    <!-- Analysis -->
+    <h6 class="mb-2"><i class="fas fa-chart-line me-2"></i>Analysis</h6>
+    <div class="row mb-3">
+      <div class="col-md-4 mb-2">
+        <a href="{{ url_for('sentiment') }}" class="btn btn-outline-success w-100"><i class="fas fa-smile"></i> Sentiment</a>
+      </div>
+      <div class="col-md-4 mb-2">
+        <a href="{{ url_for('summarization') }}" class="btn btn-outline-success w-100"><i class="fas fa-compress"></i> Summarization</a>
+      </div>
+      <div class="col-md-4 mb-2">
+        <a href="{{ url_for('topic_analysis') }}" class="btn btn-outline-success w-100"><i class="fas fa-project-diagram"></i> Topics</a>
+      </div>
+    </div>
+
+    <!-- Advanced NLP -->
+    <h6 class="mb-2"><i class="fas fa-robot me-2"></i>Advanced NLP</h6>
+    <div class="row">
+      <div class="col-md-2 mb-2">
+        <a href="{{ url_for('question_answering') }}" class="btn btn-outline-info w-100"><i class="fas fa-question-circle"></i> QA</a>
+      </div>
+      <div class="col-md-2 mb-2">
+        <a href="{{ url_for('text_generation') }}" class="btn btn-outline-info w-100"><i class="fas fa-magic"></i> Generation</a>
+      </div>
+      <div class="col-md-2 mb-2">
+        <a href="{{ url_for('translation') }}" class="btn btn-outline-info w-100"><i class="fas fa-language"></i> Translate</a>
+      </div>
+      <div class="col-md-2 mb-2">
+        <a href="{{ url_for('classification') }}" class="btn btn-outline-info w-100"><i class="fas fa-sitemap"></i> Classify</a>
+      </div>
+      <div class="col-md-2 mb-2">
+        <a href="{{ url_for('vector_embeddings') }}" class="btn btn-outline-info w-100"><i class="fas fa-vector-square"></i> Embeddings</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+(function() {
+  const links = document.currentScript.parentElement.querySelectorAll('a[href]');
+  links.forEach(link => {
+    link.addEventListener('click', function(event) {
+      
+      event.stopPropagation();
+     
+    });
+  });
+})();
+</script>

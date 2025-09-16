@@ -1,0 +1,468 @@
+{% extends "base.html" %}
+
+{% block title %}Machine Translation - NLP Ultimate Tutorial{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="mb-0">
+                        <i class="fas fa-language"></i>
+                        Machine Translation
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Translate text between multiple languages using advanced neural machine translation models.</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>About:</strong> Machine translation converts text from one language to another while preserving meaning and context as accurately as possible.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "_analysis_nav.html" %}
+
+    <!-- Input Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-keyboard"></i>
+                        Enter text to translate:
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <textarea id="textInput" class="form-control" rows="6" placeholder="Enter text here to translate...">Hello, how are you today? I hope you're doing well.</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="sampleSelect" class="form-label">Or choose a sample:</label>
+                            <select id="sampleSelect" class="form-select">
+                                <option value="Custom">Custom</option>
+                                <option value="English">English</option>
+                                <option value="Spanish">Spanish</option>
+                                <option value="French">French</option>
+                                <option value="German">German</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <button id="processBtn" class="btn btn-primary btn-lg">
+                                <i class="fas fa-language"></i>
+                                Translate
+                            </button>
+                        </div>
+                        <div>
+                            <button id="clearBtn" class="btn btn-outline-secondary">
+                                <i class="fas fa-trash"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Selection Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-cog"></i>
+                        Language Selection
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="sourceLang" class="form-label">Source Language</label>
+                            <select id="sourceLang" class="form-select">
+                                <option value="auto" selected>Auto-detect</option>
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                                <option value="ru">Russian</option>
+                                <option value="zh">Chinese</option>
+                                <option value="ar">Arabic</option>
+                                <option value="hi">Hindi</option>
+                                <option value="ja">Japanese</option>
+                                <option value="pt">Portuguese</option>
+                                <option value="it">Italian</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="targetLang" class="form-label">Target Language</label>
+                            <select id="targetLang" class="form-select">
+                                <option value="en" selected>English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                                <option value="ru">Russian</option>
+                                <option value="zh">Chinese</option>
+                                <option value="ar">Arabic</option>
+                                <option value="hi">Hindi</option>
+                                <option value="ja">Japanese</option>
+                                <option value="pt">Portuguese</option>
+                                <option value="it">Italian</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Info Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-info-circle"></i>
+                        Model Information
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-brain fa-2x text-primary mb-2"></i>
+                                    <h5>Helsinki-NLP/opus-mt</h5>
+                                    <p class="small">Pre-trained neural machine translation models</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Transformer-based architecture</li>
+                                        <li>• Multiple language pairs</li>
+                                        <li>• High accuracy translations</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-globe fa-2x text-success mb-2"></i>
+                                    <h5>Language Support</h5>
+                                    <p class="small">Comprehensive language pair coverage</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• 12+ languages supported</li>
+                                        <li>• Auto-detection capability</li>
+                                        <li>• Bidirectional translation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
+                                    <h5>Translation Analysis</h5>
+                                    <p class="small">Comprehensive analysis of translation quality</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Length comparison</li>
+                                        <li>• Language characteristics</li>
+                                        <li>• Translation statistics</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Example Texts Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-list"></i>
+                        Example Texts
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('Hello, how are you today? I hope you\'re doing well.', 'auto', 'es')">
+                                Hello, how are you today? I hope you're doing well.
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('La vie est belle et pleine de surprises.', 'auto', 'en')">
+                                La vie est belle et pleine de surprises.
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('Der schnelle braune Fuchs springt über den faulen Hund.', 'auto', 'fr')">
+                                Der schnelle braune Fuchs springt über den faulen Hund.
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('Me gustaría reservar una mesa para dos personas esta noche.', 'auto', 'en')">
+                                Me gustaría reservar una mesa para dos personas esta noche.
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-bar"></i>
+                        Translation Results
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContainer">
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                            <p>Click "Translate" to see translation results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    // Only carry inputs when navigating via Quick Nav
+    const shouldCarry = sessionStorage.getItem('carryTextOnNextPage') === '1';
+    const textInput = document.getElementById('textInput');
+    const sampleSelect = document.getElementById('sampleSelect');
+    const sourceLang = document.getElementById('sourceLang');
+    const targetLang = document.getElementById('targetLang');
+    const routeKey = 'customTextBackup:' + (window.location.pathname || '/translation');
+
+    if (shouldCarry) {
+        const storedText = sessionStorage.getItem('analysisText');
+        if (storedText) textInput.value = storedText;
+        sessionStorage.removeItem('carryTextOnNextPage');
+    } else {
+        // Fresh route: reset to defaults
+        textInput.value = textInput.defaultValue || '';
+        if (sampleSelect) sampleSelect.value = 'Custom';
+        if (sourceLang) sourceLang.value = sourceLang.querySelector('option[selected]')?.value || 'auto';
+        if (targetLang) targetLang.value = targetLang.querySelector('option[selected]')?.value || 'en';
+    }
+    
+    // Sample text dropdown handler with Custom restore
+    sampleSelect.addEventListener('change', function() {
+        const sampleType = this.value;
+        if (sampleType === 'Custom') {
+            const backupJson = sessionStorage.getItem(routeKey);
+            if (backupJson) {
+                try {
+                    const backup = JSON.parse(backupJson);
+                    textInput.value = backup.text || '';
+                    if (backup.source) sourceLang.value = backup.source;
+                    if (backup.target) targetLang.value = backup.target;
+                } catch {}
+            }
+            return;
+        }
+
+        // Save current custom input before switching away
+        sessionStorage.setItem(routeKey, JSON.stringify({
+            text: textInput.value,
+            source: sourceLang.value,
+            target: targetLang.value
+        }));
+
+        // Set sample prompts based on type
+        const samples = {
+            'English': { text: 'Hello, how are you today? I hope you\'re doing well.', source: 'auto', target: 'es' },
+            'Spanish': { text: 'La vida es bella y llena de sorpresas.', source: 'auto', target: 'en' },
+            'French': { text: 'La vie est belle et pleine de surprises.', source: 'auto', target: 'en' },
+            'German': { text: 'Der schnelle braune Fuchs springt über den faulen Hund.', source: 'auto', target: 'fr' }
+        };
+        if (samples[sampleType]) {
+            textInput.value = samples[sampleType].text;
+            sourceLang.value = samples[sampleType].source;
+            targetLang.value = samples[sampleType].target;
+            sessionStorage.setItem('analysisText', textInput.value);
+        }
+    });
+
+    // While typing or changing languages, keep a backup and analysisText
+    textInput.addEventListener('input', function(){
+        sessionStorage.setItem('analysisText', textInput.value);
+        sessionStorage.setItem(routeKey, JSON.stringify({ text: textInput.value, source: sourceLang.value, target: targetLang.value }));
+    });
+    sourceLang.addEventListener('change', function(){
+        sessionStorage.setItem(routeKey, JSON.stringify({ text: textInput.value, source: sourceLang.value, target: targetLang.value }));
+    });
+    targetLang.addEventListener('change', function(){
+        sessionStorage.setItem(routeKey, JSON.stringify({ text: textInput.value, source: sourceLang.value, target: targetLang.value }));
+    });
+    
+    // Process button handler
+    document.getElementById('processBtn').addEventListener('click', function() {
+        const text = document.getElementById('textInput').value.trim();
+        
+        if (!text) {
+            alert('Please enter text to translate.');
+            return;
+        }
+        
+        // Show loading state
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Translating...';
+        this.disabled = true;
+        
+        // Process translation
+        processTranslation();
+        
+        // Reset button after a delay
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-language"></i> Translate';
+            this.disabled = false;
+        }, 2000);
+    });
+    
+    // Clear button handler
+    document.getElementById('clearBtn').addEventListener('click', function() {
+        document.getElementById('textInput').value = '';
+        document.getElementById('resultsContainer').innerHTML = `
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                <p>Click "Translate" to see translation results</p>
+            </div>
+        `;
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Enter to process
+        if (e.ctrlKey && e.key === 'Enter') {
+            document.getElementById('processBtn').click();
+        }
+        
+        // Ctrl+L to clear
+        if (e.ctrlKey && e.key === 'l') {
+            e.preventDefault();
+            document.getElementById('clearBtn').click();
+        }
+    });
+});
+
+// Set example text and language settings
+function setExample(text, sourceLang, targetLang) {
+    document.getElementById('textInput').value = text;
+    document.getElementById('sourceLang').value = sourceLang;
+    document.getElementById('targetLang').value = targetLang;
+}
+
+// Process translation
+function processTranslation() {
+    const text = document.getElementById('textInput').value.trim();
+    const sourceLang = document.getElementById('sourceLang').value;
+    const targetLang = document.getElementById('targetLang').value;
+    
+    if (!text) {
+        alert('Please enter text to translate.');
+        return;
+    }
+    
+    showLoading('resultsContainer');
+    
+    fetch('/api/translation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            text: text,
+            source_lang: sourceLang,
+            target_lang: targetLang
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displayResults(data.result);
+        } else {
+            showError(data.error || 'An error occurred while translating text');
+        }
+    })
+    .catch(error => {
+        showError('Failed to translate text: ' + error.message);
+    })
+    .finally(() => {
+        hideLoading('resultsContainer');
+    });
+}
+
+// Show loading state
+function showLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Translating text...</p>
+            </div>
+        `;
+    }
+}
+
+// Hide loading state
+function hideLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element && element.innerHTML.includes('spinner-border')) {
+        element.innerHTML = '';
+    }
+}
+
+// Show error message
+function showError(message, elementId = 'resultsContainer') {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="alert alert-danger fade-in">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${message}
+            </div>
+        `;
+    }
+}
+
+// Display results
+function displayResults(result) {
+    const container = document.getElementById('resultsContainer');
+    if (container) {
+        container.innerHTML = result;
+        container.classList.add('fade-in');
+        
+        // Scroll to results
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+</script>
+{% endblock %}

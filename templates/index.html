@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+
+{% block title %}NLP Ultimate Tutorial - Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 mb-3">
+                <i class="fas fa-brain text-primary"></i>
+                Natural Language Processing Demo
+            </h1>
+            <p class="lead">Explore the capabilities of modern NLP models and techniques. Enter your text and select a task to analyze.</p>
+            
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                Ultimate guide to all the NLP concepts - Designed and developed by <strong>Aradhya Pavan</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Text Input Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-keyboard"></i>
+                        Enter your text:
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <textarea id="textInput" class="form-control" rows="6" placeholder="Enter or paste your text here...">Climate change is the long-term alteration of temperature and typical weather patterns in a place. The cause of current climate change is largely human activity, like burning fossil fuels, which adds heat-trapping gases to Earth's atmosphere. The consequences of changing climate are already being felt worldwide.</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="sampleSelect" class="form-label">Or choose a sample:</label>
+                            <select id="sampleSelect" class="form-select">
+                                <option value="Custom">Custom</option>
+                                {% for key, value in sample_texts.items() %}
+                                <option value="{{ key }}" {% if key == 'Scientific Text' %}selected{% endif %}>{{ key }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Text Statistics -->
+                    <div id="textStats" class="row mb-3" style="display: none;">
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">Characters</h5>
+                                    <h2 class="text-primary" id="charCount">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">Words</h5>
+                                    <h2 class="text-primary" id="wordCount">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sentences</h5>
+                                    <h2 class="text-primary" id="sentenceCount">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Warning -->
+                    <div id="warningBox" class="alert alert-warning" style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Warning:</strong> Text exceeds 500 words. Some models may truncate the input or perform slower.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="alert alert-warning">
+                <div class="d-flex align-items-start">
+                    <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                    <div>
+                        <h5 class="alert-heading">Important Instructions:</h5>
+                        <ul class="mb-0">
+                            <li>When you change the text, please reselect your analysis method and task to refresh the results</li>
+                            <li>Please wait a moment while processing your task - this may take a few seconds</li>
+                            <li>Scroll down to see all processed results for your text</li>
+                        </ul>
+                        <hr>
+                        <small><i class="fas fa-clock"></i> Processing may take longer for larger texts</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Methods (Simplified, no tabs) -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2 class="mb-0">CHOOSE AN OPERATION</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Text Processing -->
+                    <h4 class="mb-3"><i class="fas fa-edit me-2"></i>Text Processing</h4>
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-2">
+                            <a href="{{ url_for('preprocessing') }}" class="btn btn-primary w-100">
+                                <i class="fas fa-tools"></i> Text Preprocessing
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="{{ url_for('tokenization') }}" class="btn btn-primary w-100">
+                                <i class="fas fa-cut"></i> Tokenization
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="{{ url_for('pos_tagging') }}" class="btn btn-primary w-100">
+                                <i class="fas fa-tags"></i> POS Tagging
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="{{ url_for('named_entity') }}" class="btn btn-primary w-100">
+                                <i class="fas fa-user-tag"></i> Named Entities
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Analysis -->
+                    <h4 class="mb-3"><i class="fas fa-chart-line me-2"></i>Analysis</h4>
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-2">
+                            <a href="{{ url_for('sentiment') }}" class="btn btn-success w-100">
+                                <i class="fas fa-smile"></i> Sentiment Analysis
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <a href="{{ url_for('summarization') }}" class="btn btn-success w-100">
+                                <i class="fas fa-compress"></i> Text Summarization
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <a href="{{ url_for('topic_analysis') }}" class="btn btn-success w-100">
+                                <i class="fas fa-project-diagram"></i> Topic Analysis
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Advanced NLP -->
+                    <h4 class="mb-3"><i class="fas fa-robot me-2"></i>Advanced NLP</h4>
+                    <div class="row">
+                        <div class="col-md-2 mb-2">
+                            <a href="{{ url_for('question_answering') }}" class="btn btn-info w-100">
+                                <i class="fas fa-question-circle"></i> QA
+                            </a>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <a href="{{ url_for('text_generation') }}" class="btn btn-info w-100">
+                                <i class="fas fa-magic"></i> Generation
+                            </a>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <a href="{{ url_for('translation') }}" class="btn btn-info w-100">
+                                <i class="fas fa-language"></i> Translation
+                            </a>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <a href="{{ url_for('classification') }}" class="btn btn-info w-100">
+                                <i class="fas fa-sitemap"></i> Classification
+                            </a>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <a href="{{ url_for('vector_embeddings') }}" class="btn btn-info w-100">
+                                <i class="fas fa-vector-square"></i> Embeddings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-bar"></i>
+                        Results
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContainer">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                            <p>Select an analysis method above to see results here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Provide SAMPLE_TEXTS inline to avoid network for dropdown updates
+const SAMPLE_TEXTS = {{ sample_texts | tojson | safe }};
+
+// Initialize with default text statistics
+document.addEventListener('DOMContentLoaded', function() {
+    // Ensure carry flag is cleared on home to avoid unintended persistence
+    sessionStorage.removeItem('carryTextOnNextPage');
+    // If a sample (not Custom) is selected by default, load it into the textarea
+    const select = document.getElementById('sampleSelect');
+    const textInput = document.getElementById('textInput');
+    if (select && select.value !== 'Custom' && SAMPLE_TEXTS[select.value]) {
+        textInput.value = SAMPLE_TEXTS[select.value];
+    }
+    updateTextStats();
+});
+
+// Sample text dropdown handler (no fetch, instant update)
+const sampleSelectEl = document.getElementById('sampleSelect');
+if (sampleSelectEl) {
+    sampleSelectEl.addEventListener('change', function() {
+        const sampleType = this.value;
+        const textInput = document.getElementById('textInput');
+        if (sampleType === 'Custom') {
+            textInput.value = '';
+        } else {
+            textInput.value = SAMPLE_TEXTS[sampleType] || '';
+        }
+        updateTextStats();
+    });
+}
+
+// Text input handler
+const textAreaEl = document.getElementById('textInput');
+if (textAreaEl) {
+    textAreaEl.addEventListener('input', function() {
+        updateTextStats();
+    });
+}
+
+// Update text statistics
+function updateTextStats() {
+    const text = document.getElementById('textInput').value;
+    
+    if (!text.trim()) {
+        document.getElementById('textStats').style.display = 'none';
+        document.getElementById('warningBox').style.display = 'none';
+        return;
+    }
+    
+    fetch('/api/text-stats', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({text: text})
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('charCount').textContent = data.chars;
+        document.getElementById('wordCount').textContent = data.words;
+        document.getElementById('sentenceCount').textContent = data.sentences;
+        
+        document.getElementById('textStats').style.display = 'flex';
+        
+        // Show warning if text is too long
+        if (data.words > 500) {
+            document.getElementById('warningBox').style.display = 'block';
+        } else {
+            document.getElementById('warningBox').style.display = 'none';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Store text in session storage for other pages
+function storeTextForAnalysis() {
+    const text = document.getElementById('textInput').value;
+    sessionStorage.setItem('analysisText', text);
+}
+
+// Add click handlers to analysis buttons
+document.querySelectorAll('a[href*="/"]').forEach(link => {
+    if (link.href.includes('/preprocessing') || 
+        link.href.includes('/tokenization') || 
+        link.href.includes('/pos-tagging') || 
+        link.href.includes('/named-entity') ||
+        link.href.includes('/sentiment') ||
+        link.href.includes('/summarization') ||
+        link.href.includes('/topic-analysis') ||
+        link.href.includes('/question-answering') ||
+        link.href.includes('/text-generation') ||
+        link.href.includes('/translation') ||
+        link.href.includes('/classification') ||
+        link.href.includes('/vector-embeddings')) {
+        
+        link.addEventListener('click', storeTextForAnalysis);
+    }
+});
+</script>
+{% endblock %}

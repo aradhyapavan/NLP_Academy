@@ -1,0 +1,449 @@
+{% extends "base.html" %}
+
+{% block title %}Zero-shot Classification - NLP Ultimate Tutorial{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="mb-0">
+                        <i class="fas fa-tags"></i>
+                        Zero-shot Classification
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Classify text into arbitrary categories without training on specific examples.</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>About:</strong> Zero-shot classification can categorize text into arbitrary classes without having been specifically trained on those categories.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "_analysis_nav.html" %}
+
+    <!-- Input Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-keyboard"></i>
+                        Enter text to classify:
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <textarea id="textInput" class="form-control" rows="6" placeholder="Enter text here...">I absolutely love this new product! It's amazing and works perfectly.</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="sampleSelect" class="form-label">Or choose a sample:</label>
+                            <select id="sampleSelect" class="form-select">
+                                <option value="Custom">Custom</option>
+                                <option value="Sentiment">Sentiment</option>
+                                <option value="Emotion">Emotion</option>
+                                <option value="Writing Style">Writing Style</option>
+                                <option value="Intent">Intent</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <button id="processBtn" class="btn btn-primary btn-lg">
+                                <i class="fas fa-tags"></i>
+                                Classify Text
+                            </button>
+                        </div>
+                        <div>
+                            <button id="clearBtn" class="btn btn-outline-secondary">
+                                <i class="fas fa-trash"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Classification Settings Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-cog"></i>
+                        Classification Settings
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="scenario" class="form-label">Classification Scenario</label>
+                            <select id="scenario" class="form-select">
+                                <option value="Sentiment" selected>Sentiment</option>
+                                <option value="Emotion">Emotion</option>
+                                <option value="Writing Style">Writing Style</option>
+                                <option value="Intent">Intent</option>
+                                <option value="Content Type">Content Type</option>
+                                <option value="Audience Level">Audience Level</option>
+                                <option value="Custom">Custom</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-switch mt-4">
+                                <input class="form-check-input" type="checkbox" id="multiLabel">
+                                <label class="form-check-label" for="multiLabel">
+                                    Multi-label classification
+                                </label>
+                                <small class="form-text text-muted">Allow multiple categories</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Custom labels input (hidden by default) -->
+                    <div id="customLabelsDiv" class="mt-3" style="display: none;">
+                        <label for="customLabels" class="form-label">Custom Categories (one per line)</label>
+                        <textarea id="customLabels" class="form-control" rows="4" placeholder="Enter custom categories here..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Info Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-info-circle"></i>
+                        Model Information
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-brain fa-2x text-primary mb-2"></i>
+                                    <h5>BART-large-mnli</h5>
+                                    <p class="small">BART model fine-tuned on MultiNLI dataset</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Zero-shot classification</li>
+                                        <li>• Arbitrary categories</li>
+                                        <li>• High accuracy</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-sliders-h fa-2x text-success mb-2"></i>
+                                    <h5>Flexible Classification</h5>
+                                    <p class="small">Classify into any user-defined categories</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Pre-defined scenarios</li>
+                                        <li>• Custom categories</li>
+                                        <li>• Multi-label support</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-bar fa-2x text-info mb-2"></i>
+                                    <h5>Confidence Scoring</h5>
+                                    <p class="small">Detailed confidence scores for each category</p>
+                                    <ul class="list-unstyled small text-start">
+                                        <li>• Confidence visualization</li>
+                                        <li>• Ranking by score</li>
+                                        <li>• Multiple category detection</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Example Texts Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-list"></i>
+                        Example Texts
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('I absolutely love this new product! It\'s amazing and works perfectly.', 'Sentiment')">
+                                I absolutely love this new product! It's amazing and works perfectly.
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('I am so excited about this opportunity!', 'Emotion')">
+                                I am so excited about this opportunity!
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('The implementation requires careful consideration of the underlying architecture.', 'Writing Style')">
+                                The implementation requires careful consideration of the underlying architecture.
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="setExample('You should definitely buy this product because it will solve all your problems.', 'Intent')">
+                                You should definitely buy this product because it will solve all your problems.
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-bar"></i>
+                        Classification Results
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContainer">
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                            <p>Click "Classify Text" to see classification results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const shouldCarry = sessionStorage.getItem('carryTextOnNextPage') === '1';
+    if (shouldCarry) {
+        const storedText = sessionStorage.getItem('analysisText');
+        if (storedText) document.getElementById('textInput').value = storedText;
+        sessionStorage.removeItem('carryTextOnNextPage');
+    }
+    
+    // Scenario change handler
+    document.getElementById('scenario').addEventListener('change', function() {
+        const customLabelsDiv = document.getElementById('customLabelsDiv');
+        if (this.value === 'Custom') {
+            customLabelsDiv.style.display = 'block';
+        } else {
+            customLabelsDiv.style.display = 'none';
+        }
+        
+        // Update multi-label checkbox based on scenario
+        const multiLabelCheckbox = document.getElementById('multiLabel');
+        if (['Emotion', 'Intent', 'Content Type'].includes(this.value)) {
+            multiLabelCheckbox.checked = true;
+        }
+    });
+    
+    // Sample text dropdown handler
+    document.getElementById('sampleSelect').addEventListener('change', function() {
+        const sampleType = this.value;
+        const textInput = document.getElementById('textInput');
+        const scenario = document.getElementById('scenario');
+        
+        if (sampleType === 'Custom') {
+            textInput.value = '';
+        } else {
+            // Set sample prompts based on type
+            const samples = {
+                'Sentiment': 'I absolutely love this new product! It\'s amazing and works perfectly.',
+                'Emotion': 'I am so excited about this opportunity!',
+                'Writing Style': 'The implementation requires careful consideration of the underlying architecture.',
+                'Intent': 'You should definitely buy this product because it will solve all your problems.'
+            };
+            
+            if (samples[sampleType]) {
+                textInput.value = samples[sampleType];
+                scenario.value = sampleType;
+            }
+        }
+    });
+    
+    // Process button handler
+    document.getElementById('processBtn').addEventListener('click', function() {
+        const text = document.getElementById('textInput').value.trim();
+        
+        if (!text) {
+            alert('Please enter text to classify.');
+            return;
+        }
+        
+        // Show loading state
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Classifying...';
+        this.disabled = true;
+        
+        // Process classification
+        processClassification();
+        
+        // Reset button after a delay
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-tags"></i> Classify Text';
+            this.disabled = false;
+        }, 2000);
+    });
+    
+    // Clear button handler
+    document.getElementById('clearBtn').addEventListener('click', function() {
+        document.getElementById('textInput').value = '';
+        document.getElementById('resultsContainer').innerHTML = `
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-arrow-up fa-2x mb-3"></i>
+                <p>Click "Classify Text" to see classification results</p>
+            </div>
+        `;
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Enter to process
+        if (e.ctrlKey && e.key === 'Enter') {
+            document.getElementById('processBtn').click();
+        }
+        
+        // Ctrl+L to clear
+        if (e.ctrlKey && e.key === 'l') {
+            e.preventDefault();
+            document.getElementById('clearBtn').click();
+        }
+    });
+});
+
+// Set example text and scenario
+function setExample(text, scenario) {
+    document.getElementById('textInput').value = text;
+    document.getElementById('scenario').value = scenario;
+    
+    // Update custom labels visibility
+    const customLabelsDiv = document.getElementById('customLabelsDiv');
+    if (scenario === 'Custom') {
+        customLabelsDiv.style.display = 'block';
+    } else {
+        customLabelsDiv.style.display = 'none';
+    }
+}
+
+// Process classification
+function processClassification() {
+    const text = document.getElementById('textInput').value.trim();
+    const scenario = document.getElementById('scenario').value;
+    const multiLabel = document.getElementById('multiLabel').checked;
+    const customLabels = document.getElementById('customLabels').value;
+    
+    if (!text) {
+        alert('Please enter text to classify.');
+        return;
+    }
+    
+    showLoading('resultsContainer');
+    
+    fetch('/api/classification', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            text: text,
+            scenario: scenario,
+            multi_label: multiLabel,
+            custom_labels: customLabels
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displayResults(data.result);
+        } else {
+            showError(data.error || 'An error occurred while classifying text');
+        }
+    })
+    .catch(error => {
+        showError('Failed to classify text: ' + error.message);
+    })
+    .finally(() => {
+        hideLoading('resultsContainer');
+    });
+}
+
+// Show loading state
+function showLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Classifying text...</p>
+            </div>
+        `;
+    }
+}
+
+// Hide loading state
+function hideLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element && element.innerHTML.includes('spinner-border')) {
+        element.innerHTML = '';
+    }
+}
+
+// Show error message
+function showError(message, elementId = 'resultsContainer') {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="alert alert-danger fade-in">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${message}
+            </div>
+        `;
+    }
+}
+
+// Display results
+function displayResults(result) {
+    const container = document.getElementById('resultsContainer');
+    if (container) {
+        container.innerHTML = result;
+        container.classList.add('fade-in');
+        
+        // Scroll to results
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+</script>
+{% endblock %}
