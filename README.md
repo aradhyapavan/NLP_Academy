@@ -303,7 +303,7 @@ Below are screenshots of the app. Each title describes what the page shows.
 
 **Text Summarization**
 
-![Text Summarization](snapshots/7.Text Summarization.png)
+![Text Summarization](snapshots/7.Text-Summarization.png)
 
 **Topic Analysis**
 
