@@ -269,20 +269,69 @@ python -c "import nltk; nltk.download('all')"
 **Port Conflicts**
 ```bash
 # Change port in app.py or use environment variable
-export PORT=8080
+export PORT=5000
 python app.py
 ```
 
-## 📈 Roadmap
+## 📸 Snapshots
 
-- [ ] **Q1 2024**: Mathematical foundations modules
-- [ ] **Q2 2024**: Advanced transformer explanations
-- [ ] **Q3 2024**: Interactive parameter tuning
-- [ ] **Q4 2024**: Multi-language support expansion
+Below are screenshots of the app. Each title describes what the page shows.
+
+**Home**
+
+![NLP Ultimate Tutorial – Home](snapshots/1.NLP-Ultimate-Tutorial-Home.png)
+
+**Text Preprocessing**
+
+![Text Preprocessing](snapshots/2.Text-Preprocessing.png)
+
+**Tokenization**
+
+![Tokenization](snapshots/3.Tokenization.png)
+
+**Part-of-Speech Tagging**
+
+![Part-of-Speech Tagging](snapshots/4.Part-of-Speech-Tagging.png)
+
+**Named Entity Recognition**
+
+![Named Entity Recognition](snapshots/5.Named-Entity-Recognition.png)
+
+**Sentiment Analysis**
+
+![Sentiment Analysis](snapshots/6.Sentiment-Analysis.png)
+
+**Text Summarization**
+
+![Text Summarization](snapshots/7.Text Summarization.png)
+
+**Topic Analysis**
+
+![Topic Analysis](snapshots/8.Topic-Analysis.png)
+
+**Question Answering**
+
+![Question Answering](snapshots/9.Question-Answering.png)
+
+**Text Generation**
+
+![Text Generation](snapshots/10.Text-Generation.png)
+
+**Machine Translation**
+
+![Machine Translation](snapshots/11.Machine-Translation.png)
+
+**Zero-shot Classification**
+
+![Zero-shot Classification](snapshots/12.Zero-shot-Classification.png)
+
+**Vector Embeddings & Semantic Search**
+
+![Vector Embeddings & Semantic Search](snapshots\13.Vector-Embeddings-and-Semantic-Search.png)
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License 
 
 ## 🙏 Acknowledgments
 
