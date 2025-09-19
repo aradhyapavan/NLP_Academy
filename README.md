@@ -327,7 +327,7 @@ Below are screenshots of the app. Each title describes what the page shows.
 
 **Vector Embeddings & Semantic Search**
 
-![Vector Embeddings & Semantic Search](snapshots\13.Vector-Embeddings-and-Semantic-Search.png)
+![Vector Embeddings & Semantic Search](snapshots/13.Vector-Embeddings-and-Semantic-Search.png)
 
 ## 📄 License
 
